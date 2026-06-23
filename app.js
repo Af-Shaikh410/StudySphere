@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const express = require("express");
 const path = require("path");
+const router = require("./routes/authRoutes");
 
 const connectDB = require("./config/db");
 
@@ -18,10 +19,21 @@ app.use(express.static(path.join(__dirname, "public")));
 app.get("/", (req, res) => {
     res.send("StudySphere Running 🚀");
 });
+app.use("/api/auth", router);
 
 const PORT = process.env.PORT || 3000;
 
-connectDB();
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+const startServer = async () => {
+    try {
+        await connectDB();
+
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+startServer();
