@@ -1,16 +1,16 @@
 const User = require("../models/User");
-
+const bcrypt = require('bcrypt')
 const createUser = async (req, res) => {
-    console.log("Route Hit");
-    console.log(req.body);
+  //  console.log("Route Hit");
+  //  console.log(req.body);
 
     try {
         const { name, email, password } = req.body;
-
+        const hashedPassword = await bcrypt.hash(password, 10);
         const user = await User.create({
             name,
             email,
-            password
+            password : hashedPassword
         });
 
         console.log("User Created");
